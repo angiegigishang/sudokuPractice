@@ -44,8 +44,18 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	const toolkit = __webpack_require__(1);
-	const matrix = toolkit.makeMatrix();
+	const Grid = __webpack_require__(1);
+	
+	
+	const grid = new Grid($("#container"));
+	grid.build();
+	grid.layout();
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	const Toolkit = __webpack_require__(2)
 	
 	class Grid {
 		constructor(container) {
@@ -53,7 +63,7 @@
 		}
 	
 		build() {
-			const matrix = toolkit.makeMatrix();
+			const matrix = Toolkit.matrix.makeMatrix();
 	
 			const rowGroupClasses = ["row_g_top", "row_g_middle", "row_g_bottom"];
 			const colGroupClasses = ["col_g_left", "col_g_center", "col_g_right"];
@@ -85,14 +95,13 @@
 		}
 	}
 	
-	const grid = new Grid($("#container"));
-	grid.build();
-	grid.layout();
+	module.exports = Grid;
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports) {
 
+	/*矩阵数组相关工具*/
 	const matrixToolkit = {
 		makeRow(v = 0) {
 			const array = new Array(9);
@@ -111,11 +120,31 @@
 				[array[i], array[j]] = [array[j], array[i]];
 			}
 			return array;
+		},
+	
+		checkFillable() {
+			return true;
 		}
+	};
+	
+	/*宫坐标系工具*/
+	const boxToolit = {
 	
 	};
 	
-	module.exports = matrixToolkit;
+	//工具集
+	
+	
+	module.exports = class Toolkit {
+		/*矩阵和数据相关工具*/
+		static get matrix() {
+			return matrixToolkit;
+		}
+		/*宫坐标系相关工具*/
+		static get box() {
+			return boxToolit;
+		}
+	};
 
 /***/ })
 /******/ ]);
