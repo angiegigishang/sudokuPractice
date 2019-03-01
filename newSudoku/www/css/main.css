@@ -25,7 +25,7 @@ body body > * {
   font-weight: normal;
 }
 .hidden {
-  display: none;
+  display: block;
 }
 .container {
   padding-left: 5%;
@@ -64,6 +64,45 @@ body body > * {
   border-top-width: 2px;
 }
 .container .row:last-child > span {
+  border-bottom-width: 2px;
+}
+.popup-num {
+  padding-left: 5%;
+}
+.popup-num .row > span {
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  width: 10%;
+  height: 24px;
+  line-height: 24px;
+  border: 1px solid #cccccc;
+  border-right-width: 0;
+  border-bottom-width: 0;
+  background: white;
+}
+.popup-num .row > span.col_g_right {
+  border-right-width: 1px;
+}
+.popup-num .row > span:first-child {
+  border-left-width: 2px;
+}
+.popup-num .row > span:last-child {
+  border-right-width: 2px;
+}
+.popup-num .row > span.fixed {
+  background: #eeeeee;
+}
+.popup-num .row > span.empty {
+  color: white;
+}
+.popup-num .row.row_g_bottom > span {
+  border-bottom-width: 1px;
+}
+.popup-num .row:first-child > span {
+  border-top-width: 2px;
+}
+.popup-num .row:last-child > span {
   border-bottom-width: 2px;
 }
 .dashboard {
