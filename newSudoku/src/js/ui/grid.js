@@ -1,4 +1,6 @@
-const Toolkit = require("../core/toolkit")
+//生成九宫格
+const Toolkit = require("../core/toolkit");
+const Generator = require("../core/generator");
 
 class Grid {
 	constructor(container) {
@@ -6,7 +8,9 @@ class Grid {
 	}
 
 	build() {
-		const matrix = Toolkit.matrix.makeMatrix();
+		const generator = new Generator();
+		generator.generate();
+		const matrix = generator.matrix;
 
 		const rowGroupClasses = ["row_g_top", "row_g_middle", "row_g_bottom"];
 		const colGroupClasses = ["col_g_left", "col_g_center", "col_g_right"];

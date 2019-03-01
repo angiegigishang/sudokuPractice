@@ -55,7 +55,9 @@
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	const Toolkit = __webpack_require__(2)
+	//生成九宫格
+	const Toolkit = __webpack_require__(2);
+	const Generator = __webpack_require__(3);
 	
 	class Grid {
 		constructor(container) {
@@ -63,7 +65,9 @@
 		}
 	
 		build() {
-			const matrix = Toolkit.matrix.makeMatrix();
+			const generator = new Generator();
+			generator.generate();
+			const matrix = generator.matrix;
 	
 			const rowGroupClasses = ["row_g_top", "row_g_middle", "row_g_bottom"];
 			const colGroupClasses = ["col_g_left", "col_g_center", "col_g_right"];
@@ -177,6 +181,68 @@
 			return boxToolkit;
 		}
 	};
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	//生成数独解决方案
+	const Toolkit = __webpack_require__(2);
+	
+	module.exports = class Generator {
+		generate () {
+			while (!this.internalGenerate()) {
+				console.warn("try again");
+			}
+		}
+		internalGenerate () {
+			this.matrix = Toolkit.matrix.makeMatrix();
+			this.orders = Toolkit.matrix.makeMatrix()
+				.map(row => row.map((v, i) => i))
+				.map(row => Toolkit.matrix.shuffle(row));
+	
+			for(let n = 1; n <= 9; n++) {
+				if(!this.fillNumber(n)) {
+					return false;
+				}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+			}
+			return true;
+		}
+	
+		fillNumber(n) {
+			return this.fillRow(n, 0);
+		}
+	
+		fillRow(n, rowIndex) {
+			if(rowIndex > 8) {
+				return true;
+			}
+	
+			const row = this.matrix[rowIndex];
+			const orders = this.orders[rowIndex];
+			for(let i = 0; i < 9; i++) {
+				const colIndex = orders[i];
+				//如果这个位置已经有值，跳过
+				if(row[colIndex]) {
+					continue;
+				}
+	
+				//检查这个位置是否可以填n
+				if(!Toolkit.matrix.checkFillable(this.matrix, n, rowIndex, colIndex)) {
+					continue;
+				}
+	
+				row[colIndex] = n;
+				if(!this.fillRow(n, rowIndex + 1)) {
+					row[colIndex] = 0;
+					continue;
+				}
+				return true;
+			}
+			return false;
+		}
+	}
+
 
 /***/ })
 /******/ ]);
