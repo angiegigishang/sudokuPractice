@@ -57,7 +57,7 @@
 
 	//生成九宫格
 	const Toolkit = __webpack_require__(2);
-	const Generator = __webpack_require__(3);
+	const Sudoku = __webpack_require__(3);
 	
 	class Grid {
 		constructor(container) {
@@ -65,9 +65,12 @@
 		}
 	
 		build() {
-			const generator = new Generator();
-			generator.generate();
-			const matrix = generator.matrix;
+			const sudoku = new Sudoku();
+			sudoku.make();
+			const matrix = sudoku.puzzleMatrix;
+			// const generator = new Generator();
+			// generator.generate();
+			// const matrix = generator.matrix;
 	
 			const rowGroupClasses = ["row_g_top", "row_g_middle", "row_g_bottom"];
 			const colGroupClasses = ["col_g_left", "col_g_center", "col_g_right"];
@@ -76,6 +79,7 @@
 				.map((cellValue, colIndex) => {
 					return $("<span>")
 						.addClass(colGroupClasses[colIndex % 3])
+						.addClass(cellValue ? "" : "empty")
 						.text(cellValue);
 				}));
 	
@@ -90,7 +94,7 @@
 		}
 		layout() {
 			const width = $("span:first", this._$container).width();
-			$("span", this._$container)
+			$("span", this._$container) 
 				.height(width)
 				.css({
 					"line-height": `${width}px`,
@@ -184,6 +188,34 @@
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	//生成数独游戏
+	
+	//1.生成完成的解决方案：Generator
+	//2.随机去除部分数据：按比例
+	
+	const Generator = __webpack_require__(4);
+	
+	module.exports = class Sudoku {
+		constructor () {
+			//生成完成的解决方案
+			const generator = new Generator();
+			generator.generate();
+			this.solutionMatrix = generator.matrix;
+		}
+	
+		make (level = 5) {
+			//const shouldRid = Math.random() * 9 < level;
+			//生成迷盘
+			this.puzzleMatrix = this.solutionMatrix.map(row => {
+				return row.map(cell => Math.random() * 9 < level ? 0 : cell);
+			});
+		}
+	}
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//生成数独解决方案
