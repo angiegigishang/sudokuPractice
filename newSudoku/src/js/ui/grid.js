@@ -22,7 +22,7 @@ class Grid {
 			.map((cellValue, colIndex) => {
 				return $("<span>")
 					.addClass(colGroupClasses[colIndex % 3])
-					.addClass(cellValue ? "" : "empty")
+					.addClass(cellValue ? "fixed" : "empty")
 					.text(cellValue);
 			}));
 

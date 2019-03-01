@@ -51,6 +51,9 @@ body body > * {
 .container .row > span:last-child {
   border-right-width: 2px;
 }
+.container .row > span.fixed {
+  background: #eeeeee;
+}
 .container .row > span.empty {
   color: white;
 }
