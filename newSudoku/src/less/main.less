@@ -66,6 +66,12 @@ body {
 			}
 			&.empty {
 				color: white;
+			}
+			&.mark1 {
+				background: lightpink;
+			}
+			&.mark2 {
+				background: lightgreen;
 			}		
 		}
 
@@ -86,9 +92,17 @@ body {
 		}
 	}
 }
-
+@popupCellSize: 40px;
 .popup-num {
 	.container();
+
+	.row {
+		>span {
+			width: @popupCellSize;
+			height: @popupCellSize;
+			line-height: @popupCellSize;	
+		}
+	}
 }
 
 .dashboard {

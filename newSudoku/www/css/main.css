@@ -57,6 +57,12 @@ body body > * {
 .container .row > span.empty {
   color: white;
 }
+.container .row > span.mark1 {
+  background: lightpink;
+}
+.container .row > span.mark2 {
+  background: lightgreen;
+}
 .container .row.row_g_bottom > span {
   border-bottom-width: 1px;
 }
@@ -96,6 +102,12 @@ body body > * {
 .popup-num .row > span.empty {
   color: white;
 }
+.popup-num .row > span.mark1 {
+  background: lightpink;
+}
+.popup-num .row > span.mark2 {
+  background: lightgreen;
+}
 .popup-num .row.row_g_bottom > span {
   border-bottom-width: 1px;
 }
@@ -104,6 +116,11 @@ body body > * {
 }
 .popup-num .row:last-child > span {
   border-bottom-width: 2px;
+}
+.popup-num .row > span {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
 }
 .dashboard {
   position: absolute;
