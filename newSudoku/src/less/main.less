@@ -33,7 +33,7 @@ body {
 
 
 .hidden {
-	display: block;
+	display: none;
 }
 
 .container {
@@ -95,7 +95,8 @@ body {
 @popupCellSize: 40px;
 .popup-num {
 	.container();
-
+	position: absolute;
+	padding-left: 0;
 	.row {
 		>span {
 			width: @popupCellSize;

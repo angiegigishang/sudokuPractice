@@ -25,7 +25,7 @@ body body > * {
   font-weight: normal;
 }
 .hidden {
-  display: block;
+  display: none;
 }
 .container {
   padding-left: 5%;
@@ -74,6 +74,8 @@ body body > * {
 }
 .popup-num {
   padding-left: 5%;
+  position: absolute;
+  padding-left: 0;
 }
 .popup-num .row > span {
   display: inline-block;
