@@ -45,7 +45,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 	const Grid = __webpack_require__(1);
-	const PopupNumbers = __webpack_require__(5);
+	const PopupNumbers = __webpack_require__(6);
 	
 	const grid = new Grid($("#container"));
 	grid.build();
@@ -53,6 +53,20 @@
 	
 	const popupNumbers = new PopupNumbers($("#popupNumbers"));
 	grid.bindPopup(popupNumbers);
+	
+	$("#check").on("click", e => {
+		grid.check();
+	});
+	$("#reset").on("click", e => {
+		grid.reset();
+	});
+	$("#clear").on("click", e => {
+		grid.clear();
+	});
+	
+	$("#rebuild").on("click", e => {
+		grid.rebuild();
+	})
 
 /***/ }),
 /* 1 */
@@ -61,6 +75,7 @@
 	//生成九宫格
 	const Toolkit = __webpack_require__(2);
 	const Sudoku = __webpack_require__(3);
+	const Checker = __webpack_require__(5);
 	
 	class Grid {
 		constructor(container) {
@@ -104,6 +119,36 @@
 					"font-size": width < 32 ? `${width / 2}px` : ""
 				});
 		}
+	
+		//检查用户解谜的结果，成功则进行提示，失败显示错误的位置标记
+		check() {
+			const $rows = this._$container.children();
+			const data = $rows.map((rowIndex, div) => {
+				return $(div).children()
+				    .map((colIndex, span) => parseInt($(span).text()) || 0)
+			})
+			.toArray()
+			.map($data => $data.toArray());
+	
+		console.log(data);
+	
+			const checker = new Checker(data); 
+		}
+		//重置当前的迷盘到初始状态
+		reset() {
+	
+		}
+	
+		clear() {
+	
+		}
+	
+		rebuild() {
+			this._$container.empty();
+			this.build();
+			this.layout();
+		}
+	
 		bindPopup(popupNumbers) {
 			this._$container.on("click", "span", e => {
 				const $cell = $(e.target);
@@ -287,6 +332,113 @@
 
 /***/ }),
 /* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	
+	function checkArray(array) {
+		const length = array.length;
+		const marks = new Array(length);
+		marks.fill(true);
+	
+		for(let i = 0; i < length - 1; i++) {
+			if(!marks[i]) {
+				continue;
+			}
+	
+			const v = array[i];
+			//是否有效，0无效，1-9有效
+			if(!v) {
+				marks[i] = false;
+				continue;
+			}
+			//是否有重复 i+1 ~ 9,是否和i位置的数据重复
+			for(let j = i + 1; j < length; j++) {
+				if(v === array[j]) {
+					marks[i] = marks[j] = false;
+				}
+			}
+		}
+		return marks;
+	}
+	
+	const Toolkit = __webpack_require__(2);
+	//输入： matrix，用户完成的数独数据，9*9
+	//处理： 对matrix行，列，宫进行检查，并填写marks
+	//输出： 检查是否成功，marks
+	module.exports = class Checker {
+		constructor(matrix) {
+			this._matrix = matrix;
+			this._matrixMarks = Toolkit.matrix.makeMatrix(true);      		
+		}
+	
+		get matrixMarks() {
+			return this._matrixMarks;
+		}
+	
+		get isSuccess() {
+			return this._success;
+		}
+	
+		check() {
+			this.checkRows();
+			this.checkCols();
+			this.checkBoxes();
+	
+			//检查是否成功
+			this._success = this._matrixMarks.every(row => row.every(mark => mark))
+			return this._success;
+		}
+	
+		checkRows() {
+			for (let rowIndex = 0; rowIndex < 9; rowIndex++) {
+				const row = this._matrix[rowIndex];
+				const marks = checkArray(row);
+	
+				for(let colIndex = 0; colIndex < marks.length; colIndex++) {
+					if(!marks[colIndex]) {
+						this._matrixMarks[rowIndex][colIndex] = false;
+					}
+				}
+			}
+		}
+	
+		checkCols() {
+			for(let colIndex = 0; colIndex < 9; colIndex++) {
+				const cols = [];
+				for (let rowIndex = 0; rowIndex < 9; rowIndex++) {
+					cols[rowIndex] = this._matrix[rowIndex][colIndex];
+				}
+	
+				const marks = checkArray(cols);
+				for(let rowIndex = 0; rowIndex < marks.length; rowIndex++) {
+					if(!marks[rowIndex]) {
+						this._matrixMarks[rowIndex][colIndex] = false;
+					}
+				}
+			}
+		}
+	
+		checkBoxes() {
+			for(let boxIndex = 0; boxIndex < 9; boxIndex++) {
+				const boxes = Toolkit.box.getBoxCells(matrix, boxIndex);
+				const marks = checkArray(boxes);
+				for(let cellIndex = 0; cellIndex < 9; cellIndex++) {
+					if(!marks[cellIndex]){
+						const {rowIndex, colIndex} = Toolkit.box.convertFromBoxIndex(boxIndex, cellIndex);
+						this.matrixMarks[rowIndex][colIndex] = false
+					}			
+				}	
+			}
+		}
+	}
+	
+	
+	
+	
+
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports) {
 
 	module.exports = class PopupNumbers {
