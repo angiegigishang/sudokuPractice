@@ -127,12 +127,29 @@
 				return $(div).children()
 				    .map((colIndex, span) => parseInt($(span).text()) || 0)
 			})
-			.toArray()
-			.map($data => $data.toArray());
+					.toArray()
+					.map($data => $data.toArray());
 	
-		console.log(data);
+			console.log(data);
 	
-			const checker = new Checker(data); 
+			const checker = new Checker(data);
+			if(checker.check()) {
+				return true;
+			}	 
+			//检查不成功，进行标记
+			const marks = checker.matrixMarks;
+			this._$container.children()
+			    .each((rowIndex, div) => {
+			    	$(div).children().each((colIndex, span) => {
+			    		const $span = $(span);
+			    		if($span.is(".fixed") || marks[rowIndex][colIndex]) {
+			    			$span.removeClass("error");
+			    		} else {
+			    			$(span).addClass("error");		    			
+			    		}
+	
+			    	});
+			    });
 		}
 		//重置当前的迷盘到初始状态
 		reset() {
@@ -420,7 +437,7 @@
 	
 		checkBoxes() {
 			for(let boxIndex = 0; boxIndex < 9; boxIndex++) {
-				const boxes = Toolkit.box.getBoxCells(matrix, boxIndex);
+				const boxes = Toolkit.box.getBoxCells(this._matrix, boxIndex);
 				const marks = checkArray(boxes);
 				for(let cellIndex = 0; cellIndex < 9; cellIndex++) {
 					if(!marks[cellIndex]){
